@@ -47,6 +47,7 @@ angular.module("ngDraggable", [])
                 var onDragStopCallback = $parse(attrs.ngDragStop) || null;
                 var onDragSuccessCallback = $parse(attrs.ngDragSuccess) || null;
                 var allowTransform = angular.isDefined(attrs.allowTransform) ? scope.$eval(attrs.allowTransform) : true;
+                var allowStyleChange = angular.isDefined(attrs.allowStyleChange) ? scope.$eval(attrs.allowStyleChange) : true;
 
                 var getDragData = $parse(attrs.ngDragData);
 
@@ -84,8 +85,7 @@ angular.module("ngDraggable", [])
                         // no handle(s) specified, use the element as the handle
                         element.on(_pressEvents, onpress);
                     }
-                    // if(! _hasTouch && element[0].nodeName.toLowerCase() == "img"){
-                    if( element[0].nodeName.toLowerCase() == "img"){
+                    if(! _hasTouch && element[0].nodeName.toLowerCase() == "img"){
                         element.on('mousedown', function(){ return false;}); // prevent native drag for images
                     }
                 };
@@ -110,7 +110,6 @@ angular.module("ngDraggable", [])
                  * On touch devices as a small delay so as not to prevent native window scrolling
                  */
                 var onpress = function(evt) {
-                    // console.log("110"+" onpress: "+Math.random()+" "+ evt.type);
                     if(! _dragEnabled)return;
 
                     if (isClickableElement(evt)) {
@@ -122,15 +121,12 @@ angular.module("ngDraggable", [])
                         return;
                     }
 
-                    var useTouch = evt.type === 'touchstart' ? true : false;
-
-
-                    if(useTouch){
+                    if(_hasTouch){
                         cancelPress();
                         _pressTimer = setTimeout(function(){
                             cancelPress();
                             onlongpress(evt);
-                        },ngDraggable.touchTimeout);
+                        },100);
                         $document.on(_moveEvents, cancelPress);
                         $document.on(_releaseEvents, cancelPress);
                     }else{
@@ -253,6 +249,8 @@ angular.module("ngDraggable", [])
                 };
 
                 var moveElement = function (x, y) {
+                    if (!allowStyleChange) return;
+                    
                     if(allowTransform) {
                         element.css({
                             transform: 'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, ' + x + ', ' + y + ', 0, 1)',
