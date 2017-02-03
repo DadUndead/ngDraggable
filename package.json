@@ -1,5 +1,5 @@
 {
-  "name": "ngdraggable",
+  "name": "ng-draggable",
   "version": "0.1.11",
   "description": "Drag and drop module for Angular JS with support for touch devices",
   "main": "ngDraggable.js",
