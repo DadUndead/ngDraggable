@@ -183,18 +183,6 @@ angular.module("ngDraggable", [])
                     if (!_dragEnabled)return;
                     evt.preventDefault();
 
-                    if (!element.hasClass('dragging')) {
-                        _data = getDragData(scope);
-                        element.addClass('dragging');
-                        $rootScope.$broadcast('draggable:start', {x:_mx, y:_my, tx:_tx, ty:_ty, event:evt, element:element, data:_data});
-
-                        if (onDragStartCallback ){
-                            scope.$apply(function () {
-                                onDragStartCallback(scope, {$data: _data, $event: evt});
-                            });
-                        }
-                    }
-
                     _mx = ngDraggable.inputEvent(evt).pageX;//ngDraggable.getEventProp(evt, 'pageX');
                     _my = ngDraggable.inputEvent(evt).pageY;//ngDraggable.getEventProp(evt, 'pageY');
 
@@ -204,6 +192,21 @@ angular.module("ngDraggable", [])
                     } else {
                         _tx = _mx - _mrx - _dragOffset.left;
                         _ty = _my - _mry - _dragOffset.top;
+                    }
+
+                    if (!element.hasClass('dragging')) {
+                        // start dragging only if dx or dy > 0
+                        if (_tx==0 && _ty==0) return;
+
+                        _data = getDragData(scope);
+                        element.addClass('dragging');
+                        $rootScope.$broadcast('draggable:start', {x:_mx, y:_my, tx:_tx, ty:_ty, event:evt, element:element, data:_data});
+
+                        if (onDragStartCallback ){
+                            scope.$apply(function () {
+                                onDragStartCallback(scope, {$data: _data, $event: evt});
+                            });
+                        }
                     }
 
                     moveElement(_tx, _ty);
