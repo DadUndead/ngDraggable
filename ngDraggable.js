@@ -111,7 +111,6 @@ angular.module("ngDraggable", [])
                  * On touch devices as a small delay so as not to prevent native window scrolling
                  */
                 var onpress = function(evt) {
-                    // console.log('ngdraggable: onpress')
                     if(! _dragEnabled)return;
 
                     if (isClickableElement(evt)) {
@@ -145,8 +144,6 @@ angular.module("ngDraggable", [])
                 };
 
                 var onlongpress = function(evt) {
-                    console.log('ngdraggable: onlongpress')
-                    // console.log('ngdraggable: _dragEnabled', _dragEnabled)
                     if(! _dragEnabled)return;
                     evt.preventDefault();
 
@@ -185,7 +182,6 @@ angular.module("ngDraggable", [])
                 };
 
                 var onmove = function (evt) {
-                    console.log('ngdraggable: onmove')
                     if (!_dragEnabled)return;
                     evt.preventDefault();
 
@@ -202,7 +198,7 @@ angular.module("ngDraggable", [])
 
                     if (!element.hasClass('dragging')) {
                         // start dragging only if dx or dy > 0
-                        if (_tx==0 && _ty==0) return // console.log('no distance changed');
+                        if (_tx==0 && _ty==0) return;
 
                         _data = getDragData(scope);
                         element.addClass('dragging');
@@ -221,7 +217,6 @@ angular.module("ngDraggable", [])
                 };
 
                 var onrelease = function(evt) {
-                    console.log('ngdraggable: onrelease')
                     if (!_dragEnabled) return;
 
                     evt.preventDefault();
@@ -242,8 +237,6 @@ angular.module("ngDraggable", [])
                 };
 
                 var onDragComplete = function(evt) {
-                    console.log('ngdraggable: onDragComplete')
-
                     if (!onDragSuccessCallback )return;
 
                     scope.$apply(function () {
@@ -252,7 +245,6 @@ angular.module("ngDraggable", [])
                 };
 
                 var reset = function() {
-                    console.log('ngdraggable: reset')
                     if(allowTransform)
                         element.css({transform:'', 'z-index':'', '-webkit-transform':'', '-ms-transform':''});
                     else
@@ -260,7 +252,6 @@ angular.module("ngDraggable", [])
                 };
 
                 var moveElement = function (x, y) {
-                    console.log('ngdraggable: moveElement')
                     if (!allowStyleChange) return;
 
                     if(allowTransform) {
